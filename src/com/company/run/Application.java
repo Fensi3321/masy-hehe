@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Application implements Runnable {
 
-    private final Operation operation = Operation.LOAD;
+    private final Operation operation = Operation.SAVE;
     private final String path = "/home/bfs/extent/extent.hehe";
 
 
@@ -31,6 +31,7 @@ public class Application implements Runnable {
         printResourceAuthors();
         isResourceBeingUsed(Resource.getExtent().get(ThreadLocalRandom.current().nextInt(Resource.getExtent().size())));
         getReviews();
+        getNumberOfReviews();
 
     }
 
@@ -38,22 +39,23 @@ public class Application implements Runnable {
         System.out.println("SAVING TO FILE AT: " + path);
 
         Resource resource1 = new Book("Title 1", List.of("Firstname Lastname"), Optional.of("Reader Name"), LocalDate.of(2010, 5, 2)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 1", "ReviewerFirstname ReviewerLastname"));
         Resource resource2 = new Book("Title 2", List.of("Firstname Lastname", "FirstName2 Lastname2"), Optional.empty(), LocalDate.of(2015, 2, 10)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 2", "ReviewerFirstname ReviewerLastname"));
         Resource resource3 = new Book("Title 3", List.of("Firstname3 Lastname3"), Optional.of("Reader2 Name2"), LocalDate.of(2020, 12, 12)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 3", "ReviewerFirstname ReviewerLastname"));
         Resource resource4 = new Magazine("Magazine1", List.of("name1", "name2", "name3", "name4"), Optional.empty(), LocalDate.of(2022, 3, 1)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 4", "ReviewerFirstname ReviewerLastname"));
         Resource resource5 = new Magazine("Magazine2", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name1"), LocalDate.of(2022, 2, 1)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 5", "ReviewerFirstname ReviewerLastname"));
         Resource resource6 = new Magazine("Magazine3", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name2"), LocalDate.of(2022, 1, 1)
-                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+                , new Review("lorem ipsum 6", "ReviewerFirstname ReviewerLastname"));
 
         try {
             Resource.saveExtent(path);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
         System.out.println();
     }
@@ -65,6 +67,7 @@ public class Application implements Runnable {
             Resource.loadExtent(path);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            System.exit(1);
         }
         System.out.println();
     }
@@ -114,6 +117,11 @@ public class Application implements Runnable {
         Resource.getExtent().forEach(x -> {
             System.out.println(x.getReview());
         });
+        System.out.println();
+    }
+    public void getNumberOfReviews() {
+        System.out.println("Atrybut klasowy");
+        System.out.println(Review.getNumberOfReviews());
         System.out.println();
     }
 

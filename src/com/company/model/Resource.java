@@ -83,7 +83,7 @@ public abstract class Resource implements Serializable {
     }
 
     public Optional<String> getCurrentReader() {
-        return Optional.of(currentReader);
+        return Optional.ofNullable(currentReader);
     }
 
     public void setCurrentReader(Optional<String> currentReader) {

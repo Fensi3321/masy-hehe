@@ -9,10 +9,17 @@ public class Review implements Serializable {
 
     public String reviewText;
     public String reviewer;
+    public static int reviewNumber = 0;
 
     public Review(String reviewText, String reviewer) {
         this.reviewText = reviewText;
         this.reviewer = reviewer;
+
+        Review.reviewNumber++;
+    }
+
+    public static int getNumberOfReviews() {
+        return Review.reviewNumber;
     }
 
     @Override
