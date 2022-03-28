@@ -17,12 +17,14 @@ public abstract class Resource implements Serializable {
     private String title;
     private String currentReader;
     private List<String> authors;
+    private Review review;
 
-    public Resource(String title, List<String> authors, Optional<String> currentReader, LocalDate releaseDate) {
+    public Resource(String title, List<String> authors, Optional<String> currentReader, LocalDate releaseDate, Review review) {
         this.releaseDate = releaseDate;
         this.title = title;
         this.currentReader = currentReader.orElse(null);
         this.authors = authors;
+        this.review = review;
 
         extent.add(this);
     }
@@ -53,7 +55,7 @@ public abstract class Resource implements Serializable {
     }
 
     public long getDaysSinceResourceWasReleased() {
-        return Duration.between(LocalDate.now().atStartOfDay(), this.releaseDate.atStartOfDay()).toDays();
+        return Duration.between(this.releaseDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
     }
 
     public static List<Resource> getExtent() {
@@ -94,5 +96,13 @@ public abstract class Resource implements Serializable {
 
     public void setAuthors(List<String> authors) {
         this.authors = authors;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 }

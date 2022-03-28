@@ -3,19 +3,19 @@ package com.company.run;
 import com.company.model.Book;
 import com.company.model.Magazine;
 import com.company.model.Resource;
+import com.company.model.Review;
 
-import java.awt.image.RescaleOp;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Application implements Runnable {
 
-    private final Operation operation = Operation.SAVE;
-    private final String path = System.getProperty("user.home") + File.pathSeparator + "EXTENT";
+    private final Operation operation = Operation.LOAD;
+    private final String path = "/home/bfs/extent/extent.hehe";
 
 
     @Override
@@ -29,56 +29,92 @@ public class Application implements Runnable {
         printAgeOfResourcesAsDays();
         printResourceTypes();
         printResourceAuthors();
-
+        isResourceBeingUsed(Resource.getExtent().get(ThreadLocalRandom.current().nextInt(Resource.getExtent().size())));
+        getReviews();
 
     }
 
     public void createResources() {
-        Resource resource1 = new Book("Title 1", List.of("Firstname Lastname"), Optional.of("Reader Name"), LocalDate.of(2010, 5, 2));
-        Resource resource2 = new Book("Title 2", List.of("Firstname Lastname", "FirstName2 Lastname2"), Optional.empty(), LocalDate.of(2015, 2, 10));
-        Resource resource3 = new Book("Title 3", List.of("Firstname3 Lastname3"), Optional.of("Reader2 Name2"), LocalDate.of(2020, 12, 12));
-        Resource resource4 = new Magazine("Magazine1", List.of("name1", "name2", "name3", "name4"), Optional.empty(), LocalDate.of(2022, 3, 1));
-        Resource resource5 = new Magazine("Magazine2", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name1"), LocalDate.of(2022, 2, 1));
-        Resource resource6 = new Magazine("Magazine3", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name2"), LocalDate.of(2022, 1, 1));
+        System.out.println("SAVING TO FILE AT: " + path);
+
+        Resource resource1 = new Book("Title 1", List.of("Firstname Lastname"), Optional.of("Reader Name"), LocalDate.of(2010, 5, 2)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+        Resource resource2 = new Book("Title 2", List.of("Firstname Lastname", "FirstName2 Lastname2"), Optional.empty(), LocalDate.of(2015, 2, 10)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+        Resource resource3 = new Book("Title 3", List.of("Firstname3 Lastname3"), Optional.of("Reader2 Name2"), LocalDate.of(2020, 12, 12)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+        Resource resource4 = new Magazine("Magazine1", List.of("name1", "name2", "name3", "name4"), Optional.empty(), LocalDate.of(2022, 3, 1)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+        Resource resource5 = new Magazine("Magazine2", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name1"), LocalDate.of(2022, 2, 1)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
+        Resource resource6 = new Magazine("Magazine3", List.of("name1", "name2", "name3", "name4"), Optional.of("Reader Name2"), LocalDate.of(2022, 1, 1)
+                , new Review("lorem ipsum", "ReviewerFirstname ReviewerLastname"));
 
         try {
             Resource.saveExtent(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println();
     }
 
     public void loadExtent() {
+        System.out.println("LOADING FROM FILE: " + path);
+
         try {
             Resource.loadExtent(path);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        System.out.println();
     }
 
     public void getNumberOfUsedResources() {
+        System.out.println("Metoda klasowa");
         System.out.println("Currently used resources: " + Resource.getNumberOfResourcesThatAreCurrentlyUsed());
+        System.out.println();
+    }
+
+    public void isResourceBeingUsed(Resource r) {
+        System.out.println("Atrybut opcjonalny");
+        System.out.println("Resource: " + r.getTitle() + " is used? " + r.getCurrentReader().isPresent());
+        System.out.println();
     }
 
     public void printResourceTypes() {
+        System.out.println("Przeciążenie");
         Resource.getExtent().forEach(x -> {
             System.out.print("Resource type: ");
             x.printResourceType();
         });
+        System.out.println();
     }
 
     public void printAgeOfResourcesAsDays() {
-        int i = 0;
+        System.out.println("Atrybut wyliczalny (pochodny)");
+        AtomicInteger i = new AtomicInteger(1);
         Resource.getExtent().forEach(x -> {
             System.out.println("Resource number: " + i);
             System.out.println("Days old: " + x.getDaysSinceResourceWasReleased());
+            i.getAndIncrement();
         });
+        System.out.println();
     }
 
     public void printResourceAuthors() {
+        System.out.println("Atrybut powtarzalny");
         Resource.getExtent().forEach(x -> {
             System.out.println(x.getAuthors());
         });
+        System.out.println();
+    }
+
+    public void getReviews() {
+        System.out.println("Atrybut złożony");
+        Resource.getExtent().forEach(x -> {
+            System.out.println(x.getReview());
+        });
+        System.out.println();
     }
 
     enum Operation {LOAD, SAVE}
