@@ -14,13 +14,13 @@ public abstract class Resource implements Serializable {
 
     private LocalDate releaseDate;
     private String title;
-    private Optional<String> currentReader;
+    private String currentReader;
     private List<String> authors;
 
     public Resource(String title, List<String> authors, Optional<String> currentReader, LocalDate releaseDate) {
         this.releaseDate = releaseDate;
         this.title = title;
-        this.currentReader = currentReader;
+        this.currentReader = currentReader.orElse(null);
         this.authors = authors;
 
         extent.add(this);
@@ -43,7 +43,7 @@ public abstract class Resource implements Serializable {
     public static int getNumberOfResourcesThatAreCurrentlyUsed() {
         int count = 0;
         for (Resource r : extent) {
-            if (r.currentReader.isPresent()) {
+            if (r.currentReader != null) {
                 count++;
             }
         }
@@ -80,11 +80,11 @@ public abstract class Resource implements Serializable {
     }
 
     public Optional<String> getCurrentReader() {
-        return currentReader;
+        return Optional.of(currentReader);
     }
 
     public void setCurrentReader(Optional<String> currentReader) {
-        this.currentReader = currentReader;
+        this.currentReader = currentReader.orElse(null);
     }
 
     public List<String> getAuthors() {
