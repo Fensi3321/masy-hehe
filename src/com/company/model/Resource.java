@@ -3,6 +3,7 @@ package com.company.model;
 import java.io.*;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,7 @@ public abstract class Resource implements Serializable {
     @Serial
     private static final long serialVersionUID = 123456789L;
 
-    private static List<Resource> extent;
+    private static List<Resource> extent = new ArrayList<>();
 
     private LocalDate releaseDate;
     private String title;
